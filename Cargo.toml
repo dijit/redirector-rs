@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 log = "=0.4.14"
 fern = "=0.6.0"
+toml = "=0.5.9"
 lazy_static = "1.4.0"
 
 [dependencies.rocket]
