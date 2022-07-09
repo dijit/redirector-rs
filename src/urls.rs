@@ -25,7 +25,6 @@ fn load_toml_to_string(file: Option<String>) -> Result<Table, ()> {
     let url_info: Value = toml::from_str(&toml_content.to_string())
         .expect("Unable to load toml string");
     let ret = url_info["urls"].as_table().unwrap();
-    dbg!(&ret);
     Ok(Table::from(ret.to_owned()))
 }
 
