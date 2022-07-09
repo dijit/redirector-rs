@@ -1,5 +1,5 @@
 use rocket::{
-    response::status::{NoContent, NotFound},
+    response::status::NotFound,
     response::Redirect,
 };
 

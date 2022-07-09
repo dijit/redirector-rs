@@ -1,9 +1,8 @@
 use std::collections::HashMap;
-use toml::{Value, de::Error};
+use toml::Value;
 use toml::value::Table;
 
 use lazy_static::lazy_static;
-use rocket::serde::Deserializer;
 
 lazy_static! {
     //pub static ref URLS: HashMap<&'static str, &'static str> = {
@@ -13,7 +12,7 @@ lazy_static! {
 }
 
 fn load_toml_to_string(file: Option<String>) -> Result<Table, ()> {
-    let mut toml_file: String;
+    let toml_file: String;
     match file {
         Some(f) => {
             toml_file = f.to_string();
