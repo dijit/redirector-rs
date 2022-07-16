@@ -1,6 +1,12 @@
-mod cockroach;
+//mod cockroach;
 
-use rocket::form::{Form, FromForm};
+use rocket::{
+    response::status::NotFound,
+    response::Redirect,
+    http::ContentType,
+    form::{Form, FromForm},
+};
+
 
 #[derive(FromForm)]
 pub struct Submission<'r> {
@@ -13,10 +19,10 @@ pub struct Submission<'r> {
 pub async fn submit(
     submission: Form<Submission<'_>>
 ) -> String {
-    "Not implemented".to_string()
+    format!("{} -> {}", submission.short, submission.destination)
 }
 
-fn not_found_form(req: &String) -> (ContentType, String) {
+fn not_found(req: &String) -> (ContentType, String) {
     (
         ContentType::HTML,
         format!(r#"
@@ -27,4 +33,33 @@ fn not_found_form(req: &String) -> (ContentType, String) {
 </form>
         "#, req)
     )
+}
+
+#[rocket::get("/<short>")]
+pub async fn get_redirect(
+    short: String,
+) -> Result<Redirect, NotFound<(ContentType, String)>> {
+
+    Err(NotFound(
+        not_found(&short)
+    ))
+
+/*
+    let url = None;
+    match url {
+        Some(u) => Ok(Redirect::permanent(u.to_string())),
+        None => Err(
+            NotFound(
+                not_found(&short)
+            )
+        ),
+    }
+*/
+}
+
+#[rocket::head("/<short>")]
+pub async fn head_redirect(
+    short: String,
+) -> Result<Redirect, NotFound<(ContentType, String)>> {
+    get_redirect(short).await
 }

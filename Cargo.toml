@@ -10,7 +10,8 @@ postgres-openssl = {version = "=0.5.0", optional = true}
 openssl = {version = "=0.10.41", optional = true}
 
 [features]
-default = ["config_file"]
+#default = ["config_file"]
+default = ["database"]
 config_file = ["toml", "lazy_static"]
 database = ["postgres-openssl", "openssl"]
 
