@@ -7,7 +7,18 @@ The idea was semi-inspired by the book [Software Engineering at Google].
 [This chapter](https://abseil.io/resources/swe-book/html/ch03.html#ch01fn44) describes `go/` links which
 are part of knowledge sharing, canonical URLs, and are part of the inspiration for this topic.
 
-## Adding URLs
+The URL Redictor can be compiled with a static config-file backend or a database.
+
+The database backend supports user submissions through 404 pages.
+
+## Features
+
+| feature     | excludes    | default |
+|-------------|-------------|---------|
+| config_file | database    | yes     |
+| database    | config_file | no      |
+
+## Adding URLs (Config_File)
 
 [urls.toml](./urls.toml) contains a `[urls]` keyspace which contains key/value pairs of shortcodes and the URL.
 

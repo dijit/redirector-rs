@@ -1,3 +1,4 @@
+## This file is only used if the "config_file" feature is used
 [urls]
 # this is darkscience
 darkscience = "https://darkscience.net"

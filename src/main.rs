@@ -3,11 +3,15 @@ extern crate rocket;
 
 #[rocket::main]
 async fn main() {
-    let _ = rocket::build()
+    let figment = rocket::Config::figment()
+        .merge(("ident", false));
+
+    let _ = rocket::custom(figment)
         .mount("/",
            routes![
-                url::redirect::head_redirect,
-                url::redirect::get_redirect,
+               url::backend::submit,
+               url::backend::head_redirect,
+               url::backend::get_redirect,
            ],
         )
         .launch().await;
