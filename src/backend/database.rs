@@ -49,9 +49,9 @@ pub async fn submit(
 <link rel="stylesheet" media="all" href="insert.css" />
 <div class="segment">
     <h1>Congratulations: Added</h1>
-<ul><b><u>{}</u></b></ul>
+<ul><b><u><a href="{}">Want to test?</a></u></b></ul>
 <img src="/favicon-16.png" alt="->" style="width:32px;height:32px;filter:invert(40%);">
-<ul><b><u>{}</u></b></ul>
+<ul><b><u><a href="{}">Or go direct?</a></u></b></ul>
 </div>"#,
             submission.short, submission.destination
         ))
