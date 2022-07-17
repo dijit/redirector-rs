@@ -4,8 +4,10 @@ use rocket::{
     http::ContentType,
 };
 
-use rocket::{Rocket, Build, futures};
+use rocket::{Rocket, Build, futures, routes, get};
 use rocket::fairing::{self, AdHoc};
+
+use rocket_include_static_resources::{static_resources_initializer, static_response_handler};
 
 fn not_found(req: &String) -> (ContentType, String) {
     //// Backend error message for config file does not include the possibility of submitting URL
@@ -88,9 +90,18 @@ pub fn load_toml() -> Result<HashMap<String, String>, ()> {
     load_toml_str_to_hashmap(stringy)
 }
 
+static_response_handler! {
+    "/favicon.ico" => favicon => "favicon",
+    "/favicon-16.png" => favicon_png => "favicon-png",
+}
 
 pub fn stage() -> AdHoc {
     AdHoc::on_ignite("attaching config_file routes", |rocket| async {
-        rocket.mount("/", routes![list, submit, get_redirect, head_redirect])
+        rocket
+            .attach(static_resources_initializer!(
+                "favicon" => "static/favicon.ico",
+                "favicon-png" => "static/favicon-16.png",
+            ))
+            .mount("/", routes![list, submit, get_redirect, head_redirect])
     })
 }

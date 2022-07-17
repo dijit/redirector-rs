@@ -1,0 +1,28 @@
+<title>Insert</title>
+<link rel="stylesheet" media="all" href="insert.css" />
+<div class="segment">
+    <h1>Not Found: Perhaps Add it?</h1>
+    <form action="/submit" method="post">
+        <label>
+            <input
+                    type="short"
+                    name="short"
+                    placeholder="some short slug"
+                    required="required"
+                    value="{}"
+            />
+        </label>
+        <label>
+            <input
+                    type="url"
+                    name="destination"
+                    placeholder="http://example.com"
+                    required="required"
+            />
+        </label>
+        <button type="submit" class="red">
+            <i class="icon ion-arrow-forward-circle-outline"></i>
+            Submit
+        </button>
+    </form>
+</div>
