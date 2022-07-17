@@ -4,8 +4,8 @@ use rocket::{
     http::ContentType,
 };
 
-use rocket::{Rocket, Build, futures, routes, get};
-use rocket::fairing::{self, AdHoc};
+use rocket::{routes, get};
+use rocket::fairing::AdHoc;
 
 use rocket_include_static_resources::{static_resources_initializer, static_response_handler};
 
@@ -102,6 +102,6 @@ pub fn stage() -> AdHoc {
                 "favicon" => "static/favicon.ico",
                 "favicon-png" => "static/favicon-16.png",
             ))
-            .mount("/", routes![list, submit, get_redirect, head_redirect])
+            .mount("/", routes![submit, get_redirect, head_redirect])
     })
 }
