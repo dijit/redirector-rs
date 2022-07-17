@@ -3,17 +3,35 @@ name = "url"
 version = "0.0.1"
 edition = "2021"
 
+[[bin]]
+name = "url"
+path = "src/main.rs"
+
 [dependencies]
 toml = {version = "=0.5.9", optional = true}
 lazy_static = {version = "=1.4.0", optional = true}
-postgres-openssl = {version = "=0.5.0", optional = true}
-openssl = {version = "=0.10.41", optional = true}
+
+[dependencies.sqlx]
+version = "0.6.0"
+default-features = false
+features = ["macros", "offline", "migrate", "postgres", "runtime-tokio-rustls"]
+optional = true
+
+[dependencies.rocket_db_pools]
+version = "0.1.0-rc.2"
+features = ["sqlx_postgres", "sqlx_macros"]
+optional = true
+
+[dependencies.rocket_sync_db_pools]
+version = "0.1.0-rc.2"
+features = ["postgres_pool"]
+optional = true
 
 [features]
 #default = ["config_file"]
 default = ["database"]
 config_file = ["toml", "lazy_static"]
-database = ["postgres-openssl", "openssl"]
+database = ["sqlx", "rocket_db_pools", "rocket_sync_db_pools"]
 
 [dependencies.rocket]
 version = "0.5.0-rc.2"

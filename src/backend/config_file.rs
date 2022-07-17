@@ -4,6 +4,9 @@ use rocket::{
     http::ContentType,
 };
 
+use rocket::{Rocket, Build, futures};
+use rocket::fairing::{self, AdHoc};
+
 fn not_found(req: &String) -> (ContentType, String) {
     //// Backend error message for config file does not include the possibility of submitting URL
     (ContentType::Plain, format!("I couldn't find '{}' and I am running without a database backend. \
@@ -83,4 +86,11 @@ pub fn load_toml() -> Result<HashMap<String, String>, ()> {
     //FIXME: get toml from env
     let stringy = load_toml_to_string(None).unwrap();
     load_toml_str_to_hashmap(stringy)
+}
+
+
+pub fn stage() -> AdHoc {
+    AdHoc::on_ignite("attaching config_file routes", |rocket| async {
+        rocket.mount("/", routes![list, submit, get_redirect, head_redirect])
+    })
 }

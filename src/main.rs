@@ -1,4 +1,3 @@
-#[macro_use]
 extern crate rocket;
 
 #[rocket::main]
@@ -7,12 +6,9 @@ async fn main() {
         .merge(("ident", false));
 
     let _ = rocket::custom(figment)
-        .mount("/",
-           routes![
-               url::backend::submit,
-               url::backend::head_redirect,
-               url::backend::get_redirect,
-           ],
-        )
-        .launch().await;
+        .attach(url::backend::stage())
+        .launch()
+        .await;
+
+
 }
