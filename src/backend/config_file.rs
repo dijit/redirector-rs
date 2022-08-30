@@ -21,6 +21,16 @@ pub async fn submit(
     "Not implemented".to_string()
 }
 
+#[rocket::get("/")]
+pub async fn landing() -> (ContentType, String) {
+    let mut out: String = "<head><title>HOME</title></head>".to_string();
+    for (x,y) in URLS.iter() {
+        let stringy = format!("</br><a href={}>{}</a>", &y, &x);
+        out.push_str(&stringy);
+    }
+    (ContentType::HTML, out)
+}
+
 #[rocket::get("/<short>")]
 pub async fn get_redirect(
     short: String,
@@ -102,6 +112,6 @@ pub fn stage() -> AdHoc {
                 "favicon" => "static/favicon.ico",
                 "favicon-png" => "static/favicon-16.png",
             ))
-            .mount("/", routes![submit, get_redirect, head_redirect])
+            .mount("/", routes![landing, submit, get_redirect, head_redirect])
     })
 }
