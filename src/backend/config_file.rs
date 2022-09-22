@@ -23,11 +23,29 @@ pub async fn submit(
 
 #[rocket::get("/")]
 pub async fn landing() -> (ContentType, String) {
-    let mut out: String = "<head><title>HOME</title></head>".to_string();
+    let mut out: String = "<head>".to_string();
+    out.push_str("<title>HOME</title>");
+    out.push_str(r#"<link rel="stylesheet" media="all" href="list.css">"#);
+    out.push_str(r#"<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>"#);
+    out.push_str(r#"<script src="list.js"></script>"#);
+    out.push_str("</head>");
+    out.push_str(r#"<div class="deco topdeco">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                          </div>"#);
+    out.push_str(r#"<section class="list-wrap">"#);
+    out.push_str(r#"<label for="search-text">Search the list</label>"#);
+    out.push_str(r#"<input type="text" id="search-text" placeholder="search" class="search-box">"#);
+    out.push_str(r#"<span class="list-count"></span>"#);
+    out.push_str(r#"<ul id="list">"#);
     for (x,y) in URLS.iter() {
-        let stringy = format!("</br><a href={}>{}</a>", &y, &x);
+        let stringy = format!(r#"<li class="in"><a href={}>{}</a></li>"#, &y, &x);
         out.push_str(&stringy);
     }
+    out.push_str(r#"</ul>"#);
+    out.push_str(r#"</section>"#);
     (ContentType::HTML, out)
 }
 
@@ -103,6 +121,8 @@ pub fn load_toml() -> Result<HashMap<String, String>, ()> {
 static_response_handler! {
     "/favicon.ico" => favicon => "favicon",
     "/favicon-16.png" => favicon_png => "favicon-png",
+    "/list.css" => list_css => "list-css",
+    "/list.js" => list_js => "list-js",
 }
 
 pub fn stage() -> AdHoc {
@@ -111,7 +131,19 @@ pub fn stage() -> AdHoc {
             .attach(static_resources_initializer!(
                 "favicon" => "static/favicon.ico",
                 "favicon-png" => "static/favicon-16.png",
+                "list-css" => "static/list.css",
+                "list-js" => "static/list.js",
             ))
-            .mount("/", routes![landing, submit, get_redirect, head_redirect])
+            .mount("/", routes![
+                landing,
+                list_css,
+                list_js,
+                favicon,
+                favicon_png,
+                submit,
+                get_redirect,
+                head_redirect
+            ]
+            )
     })
 }
