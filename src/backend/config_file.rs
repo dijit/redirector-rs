@@ -1,11 +1,16 @@
-use rocket::{
-    response::status::NotFound,
-    response::Redirect,
-    http::ContentType,
-};
+/* jinja rendering */
+use askama::Template;
 
-use rocket::{routes, get};
-use rocket::fairing::AdHoc;
+use rocket::{
+    get, head, post,
+    routes,
+    http::ContentType,
+    fairing::AdHoc,
+    response::{
+        Redirect,
+        status::NotFound,
+    },
+};
 
 use rocket_include_static_resources::{static_resources_initializer, static_response_handler};
 
@@ -15,41 +20,29 @@ fn not_found(req: &String) -> (ContentType, String) {
              Try something else?", req))
 }
 
-#[rocket::post("/submit")]
+#[post("/submit")]
 pub async fn submit(
 ) -> String {
     "Not implemented".to_string()
 }
 
-#[rocket::get("/")]
-pub async fn landing() -> (ContentType, String) {
-    let mut out: String = "<head>".to_string();
-    out.push_str("<title>HOME</title>");
-    out.push_str(r#"<link rel="stylesheet" media="all" href="list.css">"#);
-    out.push_str(r#"<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>"#);
-    out.push_str(r#"<script src="list.js"></script>"#);
-    out.push_str("</head>");
-    out.push_str(r#"<div class="deco topdeco">
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                          </div>"#);
-    out.push_str(r#"<section class="list-wrap">"#);
-    out.push_str(r#"<label for="search-text">Search the list</label>"#);
-    out.push_str(r#"<input type="text" id="search-text" placeholder="search" class="search-box">"#);
-    out.push_str(r#"<span class="list-count"></span>"#);
-    out.push_str(r#"<ul id="list">"#);
-    for (x,y) in URLS.iter() {
-        let stringy = format!(r#"<li class="in"><a href={}>{}</a></li>"#, &y, &x);
-        out.push_str(&stringy);
-    }
-    out.push_str(r#"</ul>"#);
-    out.push_str(r#"</section>"#);
-    (ContentType::HTML, out)
+#[derive(Template)]
+#[template(path = "list.html")]
+struct ListTemplate<'a> {
+    urls: &'a Vec<String>,
 }
 
-#[rocket::get("/<short>")]
+#[get("/")]
+async fn landing() -> (ContentType, String) {
+    let mut veccy: Vec<String> = Vec::new();
+    for (x,_) in URLS.iter() {
+        veccy.push(x.to_string());
+    }
+    let out: ListTemplate = ListTemplate{urls: &veccy};
+    (ContentType::HTML, out.render().unwrap())
+}
+
+#[get("/<short>")]
 pub async fn get_redirect(
     short: String,
 ) -> Result<Redirect, NotFound<(ContentType, String)>> {
@@ -64,7 +57,7 @@ pub async fn get_redirect(
     }
 }
 
-#[rocket::head("/<short>")]
+#[head("/<short>")]
 pub async fn head_redirect(
     short: String,
 ) -> Result<Redirect, NotFound<(ContentType, String)>> {

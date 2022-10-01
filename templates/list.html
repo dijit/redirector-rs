@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home</title>
+  <link rel="stylesheet" media="all" href="list.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="list.js"></script>
+</head>
+<body>
+  <div class="deco top-deco">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <section class="list-wrap">
+    <label for="search-text">Search the list</label>
+    <input type="text" id="search-text" placeholder="search" class="search-box">
+    <span class="list-count"></span>
+    <ul id="list">
+      {% for x in urls %}
+      <li class="in"><a href=/{{x}}>{{x}}</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+</body>
+</html>
