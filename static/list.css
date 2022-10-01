@@ -150,7 +150,7 @@ h3 {
     margin:0 0 2em;
     text-align:center;
     font-weight:normal;
-    font-family: georgia, times;
+    font-family: georgia, times, sans-serif;
     font-style:italic;
     color:#777;
     font-size:1em;
@@ -160,7 +160,7 @@ h3 {
     float:left;
     width:60%;
     margin:2em 20%;
-    padding:2em 0;
+    /* padding:2em 0; */
     background:#f9f9f9;
     border-left:5px solid #003842;
     padding:10px 20px;
@@ -196,7 +196,7 @@ p {
     line-height:1.5em;
 }
 
-.topdeco {
+.top-deco {
     float:left;
     width:100%;
     height:10px;
@@ -204,7 +204,7 @@ p {
     z-index:10;
 }
 
-.topdeco span {
+.top-deco span {
     float:left;
     width:25%;
     height:100%;
