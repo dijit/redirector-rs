@@ -30,13 +30,13 @@ features = ["postgres_pool"]
 optional = true
 
 [features]
-default = ["config_file"]
-#default = ["database"]
+#default = ["config_file"]
+default = ["database"]
 config_file = ["toml", "lazy_static"]
 database = ["sqlx", "rocket_db_pools", "rocket_sync_db_pools"]
 
 [dependencies.sqlx]
-version = "0.6.0"
+version = "0.5.13"
 default-features = false
 features = ["macros", "offline", "migrate", "postgres", "runtime-tokio-rustls"]
 optional = true

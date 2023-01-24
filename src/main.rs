@@ -1,5 +1,10 @@
 extern crate rocket;
 
+/*
+#[cfg(feature="database")]
+extern crate rocket_db_pools;
+*/
+
 use rocket::shield::Frame;
 use rocket::shield::XssFilter;
 use rocket::shield::Hsts;
@@ -19,3 +24,5 @@ async fn main() {
         .launch()
         .await;
 }
+
+

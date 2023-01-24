@@ -1,14 +1,8 @@
 /* http status codes and headers */
-use rocket::{
-    form::{Form, FromForm},
-    get,
-    http::ContentType,
-    response::status::{Created, NoContent, NotFound},
-    response::Redirect,
-};
+use rocket::{form::{Form, FromForm}, get, http::ContentType, response::status::{Created, NoContent, NotFound}, response::Redirect, error};
 
 /* build a database backend */
-use rocket::fairing::AdHoc;
+use rocket::fairing::{self, AdHoc};
 use rocket::routes;
 
 use rocket_db_pools::sqlx::{self, Row};
@@ -150,10 +144,9 @@ pub struct Db(sqlx::PgPool);
 
 type Result<T, E = rocket::response::Debug<sqlx::Error>> = std::result::Result<T, E>;
 
-/* FIXME: rocket_db_pools SQLx does not allow enabling the "migrations" macro feature
-async fn run_migrations(rocket: Rocket<Build>) -> fairing::Result {
+async fn run_migrations(rocket: rocket::Rocket<rocket::Build>) -> fairing::Result {
     match Db::fetch(&rocket) {
-        Some(db) => match sqlx::migrate!("db/migrations").run(&**db).await {
+        Some(db) => match sqlx::migrate!("./migrations").run(&**db).await {
             Ok(_) => Ok(rocket),
             Err(e) => {
                 error!("Failed to initialize SQLx database: {}", e);
@@ -163,7 +156,6 @@ async fn run_migrations(rocket: Rocket<Build>) -> fairing::Result {
         None => Err(rocket),
     }
 }
-*/
 
 static_response_handler! {
     "/favicon.ico" => favicon => "favicon",
@@ -176,9 +168,7 @@ pub fn stage() -> AdHoc {
     AdHoc::on_ignite("SQLx Stage", |rocket| async {
         rocket
             .attach(Db::init())
-            /* FIXME: rocket_db_pools SQLx does not allow enabling the "migrations" macro feature
             .attach(AdHoc::try_on_ignite("SQLx Migrations", run_migrations))
-             */
             .attach(
                 static_resources_initializer!(
                     "favicon" => "static/favicon.ico",
